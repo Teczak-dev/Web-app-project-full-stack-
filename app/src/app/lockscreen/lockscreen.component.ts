@@ -1,4 +1,4 @@
-import { Component,EventEmitter,Output } from '@angular/core';
+import { Component,EventEmitter,Input,Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { HttpClient } from '@angular/common/http';
@@ -28,6 +28,7 @@ export class LockscreenComponent {
 
   @Output() setIsLogin = new EventEmitter<void>();
   @Output() powerOffEvent = new EventEmitter<void>();
+  @Output() setUserLogin = new EventEmitter<string>();;
 
   loginUser(){
   
@@ -42,6 +43,7 @@ export class LockscreenComponent {
   validUser():boolean{
     for (let user of this.users) {
       if (user.login === this.username && user.haslo === this.password) {
+        this.setUserLogin.emit(this.username);
         return true;
       }
     }

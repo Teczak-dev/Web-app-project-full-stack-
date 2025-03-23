@@ -22,8 +22,8 @@
         </button>
 
         <section id="Tablice_viewer">
-            <button class="table_btn" *ngFor="let item of tablice" (click)="openTableInfo(item.id)" (dblclick)="askToDeleteTable(item.id)">
-                {{item.name}}
+            <button class="table_btn" *ngFor="let item of tablice" (click)="openTableInfo(item.nazwa)" (dblclick)="askToDeleteTable(item.nazwa)">
+                {{item.nazwa}}
             </button>
             
         </section>
@@ -35,16 +35,16 @@
         </button>
         
         <section id="tasks_viewer">
-            <button class="task" *ngFor="let item of getFilteredTasks()" (dblclick)="editTask(item.id)">
+            <button class="task" *ngFor="let item of getFilteredTasks()" (dblclick)="editTask(item.tytul)">
                 
-                <button *ngIf="!item.zrealizowane" class="ready_task_btn" (click)="realizeTask(item.id)">
+                <button *ngIf="!item.zrealizowane" class="ready_task_btn" (click)="realizeTask(item.tytul)">
                     Zrealizowano
                 </button>
                 <div *ngIf="item.zrealizowane">
                     ✅
                 </div>
                 <h1>{{item.tytul}}</h1>
-                <button class="delete_task_btn" (click)="deleteTask(item.id)">
+                <button class="delete_task_btn" (click)="deleteTask(item.tytul)">
                     Usuń
                 </button>
 
@@ -63,7 +63,7 @@
         <input type="text" [(ngModel)]="task_tytul" placeholder="Tytuł">
         <textarea [(ngModel)]="task_opis" placeholder="Opis" maxlength="200" style="resize: none; width: 90%; height: 100px;"></textarea>
         <select [(ngModel)]="task_tablica">
-            <option *ngFor="let item of tablice" [value]="item.name">{{item.name}}</option>
+            <option *ngFor="let item of tablice" [value]="item.nazwa">{{item.nazwa}}</option>
         </select>
         <button (click)="saveTask()">Zapisz</button>
     </section>
@@ -78,7 +78,7 @@
         <input type="text" [(ngModel)]="task_tytul" placeholder="Tytuł">
         <textarea [(ngModel)]="task_opis" placeholder="Opis" maxlength="200" style="resize: none; width: 90%; height: 100px;"></textarea>
         <select [(ngModel)]="task_tablica">
-            <option *ngFor="let item of tablice" [value]="item.name">{{item.name}}</option>
+            <option *ngFor="let item of tablice" [value]="item.nazwa">{{item.nazwa}}</option>
         </select>
         <button (click)="addTask()">Dodaj</button>
     </section>

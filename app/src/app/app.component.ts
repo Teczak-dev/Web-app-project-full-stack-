@@ -14,9 +14,11 @@ import { LockscreenComponent } from "./lockscreen/lockscreen.component";
 })
 export class AppComponent {
   title = 'app';
+
+  userLogin:string = "";
   
-  isPowerOn = false;
-  isLogin = false;
+  isPowerOn:boolean = false;
+  isLogin:boolean = false;
 
   powerOff(){
     this.isPowerOn = false;
@@ -34,6 +36,9 @@ export class AppComponent {
     this.isLogin = false;
   }
 
-
+  setUserLogin(login: string) {
+    this.userLogin = login; // Set the login value
+    console.log('User login received:', this.userLogin);
+  }
 
 }

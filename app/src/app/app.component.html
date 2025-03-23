@@ -3,9 +3,9 @@
   <div>
     
   </div>
-  <app-dock></app-dock>
+  <app-dock [login]="userLogin" ></app-dock>
 </main>
 <section id="powerOn" *ngIf="!isPowerOn">
   <button (click)="PowerOn()"></button>
 </section>
-<app-lockscreen (setIsLogin)="setIsLoginTrue()" (powerOffEvent)="powerOff()"  *ngIf="!isLogin && isPowerOn"></app-lockscreen>
+<app-lockscreen (setUserLogin)="setUserLogin($event)" (setIsLogin)="userLogin" (setIsLogin)="setIsLoginTrue()" (powerOffEvent)="powerOff()"  *ngIf="!isLogin && isPowerOn"></app-lockscreen>

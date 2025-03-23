@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { NgFor } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-dock',
@@ -14,6 +15,9 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './dock.component.css'
 })
 export class DockComponent {
+
+  @Input() login: string = "";
+
 
   task_tytul:string = "";
   task_opis:string = "";
@@ -28,36 +32,40 @@ export class DockComponent {
   isAddTableOpen = false;
   selectedTask = -1;
 
-  tablice = [
-    {name: 'Zadania', id: 1},
-    {name: 'Praca', id: 2},
-    {name: 'Obowiązki', id: 3},
-    {name: 'Projekt', id: 4},
-  ]
+  tablice: { nazwa:string,user:string }[] = [];
   zadania = [
     {tytul: 'Zadanie 1',opis: "trzeba zrobić zadanie nr1", tablica:"Zadania", zrealizowane: false, id: 1},
-  ]
-  
+  ];
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.userService.getTables().subscribe(data => {
+      var tablice_usera = data?.filter((tablica: { nazwa: string; user: string }) => tablica.user === this.login);
+      this.tablice = tablice_usera;
+    });
+  }
 
   openTable(){//* otwiera okno z tablicami
     this.isTableWindowOpen = true;
     document.getElementById("tableAppIcon")?.style.setProperty("border", "5px solid green");
     this.closeEditTask();
     this.closeAddTask();
+    alert(this.login)
   }
 
   getFilteredTasks() {//* filtruje zdania po tablicy
     return this.zadania.filter(zadanie => zadanie.tablica === this.selectedTable);
   }
 
-  openTableInfo(id: number){//* otwiera tablice i ustawia wartość
-    const tablica = this.tablice.find(tablica => tablica.id === id);
+  openTableInfo(nam: string){//* otwiera tablice i ustawia wartość
+    const tablica = this.tablice?.find(item => item.nazwa === nam);
     if (tablica) {
       //alert(`Otwieram tablice o id: ${id} i nazwie: ${tablica.name}`);
-      this.selectedTable = tablica.name;
+      this.selectedTable = tablica.nazwa;
 
     } else {
-      alert(`Nie znaleziono tablicy o id: ${id}`);
+      alert(`Nie znaleziono tablicy o nazwie: ${nam}`);
     }
   }
 
@@ -74,8 +82,8 @@ export class DockComponent {
     this.cleanVariablesOfTask();
   }
 
-  editTask(id: number){//* edycja zadania( otwarcie okna edycji)
-    const zadanie = this.zadania.find(zadanie => zadanie.id === id);
+  editTask(nazwa: string){//* edycja zadania( otwarcie okna edycji)
+    const zadanie = this.zadania.find(zadanie => zadanie.tytul === nazwa);
     if (zadanie) {
       // alert(`Edytuje zadanie o id: ${id} i tytule: ${zadanie.tytul}, opisie: ${zadanie.opis}`);
       this.isEditTaskOpen = true;
@@ -85,24 +93,24 @@ export class DockComponent {
       this.task_tablica = zadanie.tablica;
       this.selectedTask = zadanie.id;
     } else {
-      alert(`Nie znaleziono zadania o id: ${id}`);
+      alert(`Nie znaleziono zadania o id: ${nazwa}`);
     }
   }
 
-  deleteTask(id: number){//* usuwanie zadania
-    const index = this.zadania.findIndex(zadanie => zadanie.id === id);
+  deleteTask(nazw: string){//* usuwanie zadania
+    const index = this.zadania.findIndex(zadanie => zadanie.tytul === nazw);
     if (index !== -1) {
       this.zadania.splice(index, 1);
     } else {
-      alert(`Nie znaleziono zadania o id: ${id}`);
+      alert(`Nie znaleziono zadania o id: ${nazw}`);
     }
   }
-  realizeTask(id: number){//* realizacja zadania  
-    const zadanie = this.zadania.find(zadanie => zadanie.id === id);
+  realizeTask(nazw: string){//* realizacja zadania  
+    const zadanie = this.zadania.find(zadanie => zadanie.tytul === nazw);
     if (zadanie) {
       zadanie.zrealizowane = true;
     } else {
-      alert(`Nie znaleziono zadania o id: ${id}`);
+      alert(`Nie znaleziono zadania o id: ${nazw}`);
     }
   }
   saveTask(){//* zapisuje edytowane zadanie
@@ -158,26 +166,28 @@ export class DockComponent {
 
   addTable(){//* dodawanie tablicy
     const id = this.tablice.length + 1;
-    this.tablice.push({name: this.table_name, id});
+    this.tablice.push({nazwa: this.table_name, user: this.login});
+    this.userService.addTable({nazwa: this.table_name, user: this.login}).subscribe();
     this.closeAddTable();
 
   }
 
-  deleteTable(id: number){//* usuwanie tablicy
-    const index = this.tablice.findIndex(tablica => tablica.id === id);
+  deleteTable(nazw: string){//* usuwanie tablicy
+    const index = this.tablice.findIndex(tablica => tablica.nazwa === nazw);
     if (index !== -1) {
+      this.userService.deleteTable({nazwa: nazw}).subscribe();
       this.tablice.splice(index, 1);
     } else {
-      alert(`Nie znaleziono tablicy o id: ${id}`);
+      alert(`Nie znaleziono tablicy o id: ${nazw}`);
     }
   }
 
-  askToDeleteTable(id: number){//* pytanie o usunięcie tablicy
-    const tablica = this.tablice.find(tablica => tablica.id === id);
-    if (tablica) { 
-      if(confirm(`Czy na pewno chcesz usunąć tablice o nazwie: ${tablica.name}`)){
-        this.deleteTable(id);
+  askToDeleteTable(nazw: string){//* pytanie o usunięcie tablicy
+      const tablica = this.tablice.find(tablica => tablica.nazwa === nazw);
+      if (tablica) { 
+        if(confirm(`Czy na pewno chcesz usunąć tablice o nazwie: ${tablica.nazwa}`)){
+          this.deleteTable(nazw);
+        }
       }
     }
-  }
 }
