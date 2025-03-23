@@ -30,20 +30,31 @@ export class DockComponent {
   isEditTaskOpen = false;
   isAddTaskOpen = false;
   isAddTableOpen = false;
-  selectedTask = -1;
+  selectedTask = "";
 
-  tablice: { nazwa:string,user:string }[] = [];
-  zadania = [
-    {tytul: 'Zadanie 1',opis: "trzeba zrobić zadanie nr1", tablica:"Zadania", zrealizowane: false, id: 1},
-  ];
+  tablice: { 
+    nazwa:string,
+    user:string 
+  }[] = [];
+  zadania: {
+    tytul:string,
+    opis:string,
+    stan_zrobienia:boolean,
+    tablica:string
+  }[] = [];
 
   constructor(private userService: UserService) {}
 
   ngOnInit() {
     this.userService.getTables().subscribe(data => {
-      var tablice_usera = data?.filter((tablica: { nazwa: string; user: string }) => tablica.user === this.login);
-      this.tablice = tablice_usera;
+      this.tablice  = data?.filter((tablica: { nazwa: string; user: string }) => tablica.user === this.login);
+      
     });
+
+    this.userService.getTasks().subscribe(data =>{
+      this.zadania = data;
+    });
+
   }
 
   openTable(){//* otwiera okno z tablicami
@@ -51,7 +62,7 @@ export class DockComponent {
     document.getElementById("tableAppIcon")?.style.setProperty("border", "5px solid green");
     this.closeEditTask();
     this.closeAddTask();
-    alert(this.login)
+    //alert(this.login)
   }
 
   getFilteredTasks() {//* filtruje zdania po tablicy
@@ -59,13 +70,14 @@ export class DockComponent {
   }
 
   openTableInfo(nam: string){//* otwiera tablice i ustawia wartość
-    const tablica = this.tablice?.find(item => item.nazwa === nam);
-    if (tablica) {
-      //alert(`Otwieram tablice o id: ${id} i nazwie: ${tablica.name}`);
-      this.selectedTable = tablica.nazwa;
-
-    } else {
-      alert(`Nie znaleziono tablicy o nazwie: ${nam}`);
+    if(nam == ""){
+      this.selectedTable = "";
+    }
+    else{
+      const tablica = this.tablice?.find(item => item.nazwa === nam);
+      if (tablica) {
+        this.selectedTable = tablica.nazwa;
+      }
     }
   }
 
@@ -91,7 +103,7 @@ export class DockComponent {
       this.task_tytul = zadanie.tytul;
       this.task_opis = zadanie.opis;
       this.task_tablica = zadanie.tablica;
-      this.selectedTask = zadanie.id;
+      this.selectedTask = zadanie.tytul;
     } else {
       alert(`Nie znaleziono zadania o id: ${nazwa}`);
     }
@@ -100,6 +112,9 @@ export class DockComponent {
   deleteTask(nazw: string){//* usuwanie zadania
     const index = this.zadania.findIndex(zadanie => zadanie.tytul === nazw);
     if (index !== -1) {
+      //połączenie
+
+      this.userService.deleteTask({tytul:nazw}).subscribe();
       this.zadania.splice(index, 1);
     } else {
       alert(`Nie znaleziono zadania o id: ${nazw}`);
@@ -108,17 +123,29 @@ export class DockComponent {
   realizeTask(nazw: string){//* realizacja zadania  
     const zadanie = this.zadania.find(zadanie => zadanie.tytul === nazw);
     if (zadanie) {
-      zadanie.zrealizowane = true;
-    } else {
-      alert(`Nie znaleziono zadania o id: ${nazw}`);
+      //połączenie
+      zadanie.stan_zrobienia = true;
+      this.userService.updateTask({
+        tytul: zadanie.tytul,
+        opis: zadanie.opis,
+        stan_zrobienia: zadanie.stan_zrobienia,
+        tablica: zadanie.tablica
+      }).subscribe();
     }
   }
   saveTask(){//* zapisuje edytowane zadanie
-    const zadanie = this.zadania.find(zadanie => zadanie.id === this.selectedTask);
+    const zadanie = this.zadania.find(zadanie => zadanie.tytul === this.selectedTask);
     if (zadanie) {
       zadanie.tytul = this.task_tytul;
       zadanie.opis = this.task_opis;
       zadanie.tablica = this.task_tablica;
+      //połączenie
+      this.userService.updateTask({
+        tytul: zadanie.tytul,
+        opis: zadanie.opis,
+        stan_zrobienia: zadanie.stan_zrobienia,
+        tablica: zadanie.tablica
+      }).subscribe();
       this.closeEditTask();
       this.cleanVariablesOfTask();
     } else {
@@ -139,10 +166,23 @@ export class DockComponent {
     
   }
   addTask(){//* dodawanie zadania
-    const id = this.zadania.length + 1;
-    this.zadania.push({tytul: this.task_tytul, opis: this.task_opis, tablica: this.task_tablica, zrealizowane: false, id});
-    this.closeAddTask();
-    this.cleanVariablesOfTask();
+    if(this.task_tytul.length < 1 || this.task_opis.length < 1 || this.task_tablica == ""){
+      alert("Wypełnij wszystkie pola");
+    }
+    else{
+      const id = this.zadania.length + 1;
+      const task:any = {
+        tytul: this.task_tytul, 
+        opis: this.task_opis, 
+        tablica: this.task_tablica, 
+        stan_zrobienia: false
+      }
+      this.zadania.push(task);
+      //połączenie
+      this.userService.addTask(task).subscribe();
+      this.closeAddTask();
+      this.cleanVariablesOfTask();
+    }
   }
 
 
@@ -165,20 +205,31 @@ export class DockComponent {
   }
 
   addTable(){//* dodawanie tablicy
-    const id = this.tablice.length + 1;
-    this.tablice.push({nazwa: this.table_name, user: this.login});
-    this.userService.addTable({nazwa: this.table_name, user: this.login}).subscribe();
-    this.closeAddTable();
+    if( this.table_name.length < 1){
+      alert("Wypełnij pole");
+    }
+    else{
+      const id = this.tablice.length + 1;
+      this.tablice.push({nazwa: this.table_name, user: this.login});
+      this.userService.addTable({nazwa: this.table_name, user: this.login}).subscribe();
+      this.closeAddTable();
+    }
 
   }
 
   deleteTable(nazw: string){//* usuwanie tablicy
     const index = this.tablice.findIndex(tablica => tablica.nazwa === nazw);
     if (index !== -1) {
-      this.userService.deleteTable({nazwa: nazw}).subscribe();
       this.tablice.splice(index, 1);
-    } else {
-      alert(`Nie znaleziono tablicy o id: ${nazw}`);
+      for(var x of this.zadania){
+        if(x.tablica == nazw){
+          this.deleteTask(x.tytul);
+        }
+      }
+      this.userService.deleteTable({nazwa: nazw}).subscribe();
+      
+      
+      
     }
   }
 
@@ -187,6 +238,7 @@ export class DockComponent {
       if (tablica) { 
         if(confirm(`Czy na pewno chcesz usunąć tablice o nazwie: ${tablica.nazwa}`)){
           this.deleteTable(nazw);
+          this.openTableInfo("");
         }
       }
     }

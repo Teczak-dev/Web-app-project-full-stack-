@@ -37,10 +37,10 @@
         <section id="tasks_viewer">
             <button class="task" *ngFor="let item of getFilteredTasks()" (dblclick)="editTask(item.tytul)">
                 
-                <button *ngIf="!item.zrealizowane" class="ready_task_btn" (click)="realizeTask(item.tytul)">
+                <button *ngIf="!item.stan_zrobienia" class="ready_task_btn" (click)="realizeTask(item.tytul)">
                     Zrealizowano
                 </button>
-                <div *ngIf="item.zrealizowane">
+                <div *ngIf="item.stan_zrobienia">
                     ✅
                 </div>
                 <h1>{{item.tytul}}</h1>
@@ -63,7 +63,7 @@
         <input type="text" [(ngModel)]="task_tytul" placeholder="Tytuł">
         <textarea [(ngModel)]="task_opis" placeholder="Opis" maxlength="200" style="resize: none; width: 90%; height: 100px;"></textarea>
         <select [(ngModel)]="task_tablica">
-            <option *ngFor="let item of tablice" [value]="item.nazwa">{{item.nazwa}}</option>
+            <option *ngFor="let item of tablice; let i = index" [value]="item.nazwa" [selected]="i == 0">{{item.nazwa}}</option>
         </select>
         <button (click)="saveTask()">Zapisz</button>
     </section>

@@ -52,6 +52,47 @@ app.post('/tables/delete', async (req, res) => {
     : req.body.nazwa }));
 });
 
+// dane zwiazane z wzorem zadania i dodawanie oraz pobieranie zadań
+const TaskSchema = new mongoose.Schema({  
+  tytul: String,
+  opis: String,
+  stan_zrobienia: Boolean,
+  tablica: String
+});
+const Task = mongoose.model('tasks', TaskSchema);
+app.get('/tasks', async (req, res) => {
+  const task = await Task.find();
+  res.json(task);
+});
+app.post('/tasks', async (req, res) => {
+  const newTask = new Task(req.body);
+  await newTask.save();
+  res.json(newTask);
+});
+app.post('/tasks/delete', async (req, res) => {
+  res.json(await Task.deleteOne({ tytul
+    : req.body.tytul }));
+});
+app.post('/tasks/update', async(req, res)=>{
+  const updatedTask = await Task.findOneAndUpdate(
+    { tytul: req.body.tytul },
+    {
+      $set: {
+        opis: req.body.opis,
+        stan_zrobienia: req.body.stan_zrobienia,
+        tablica: req.body.tablica
+      }
+    },
+    { new: true } 
+  );
+
+  if (!updatedTask) {
+    return res.status(404).json({ message: 'Task not found' });
+  }
+
+  res.json(updatedTask);
+});
+
 
 // Uruchomienie serwera
 app.listen(PORT, () => {
