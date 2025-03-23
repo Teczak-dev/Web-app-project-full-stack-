@@ -1,0 +1,75 @@
+.lockscreen__content{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-image: url('../../assets/img/desktop.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+.lockscreen__content *{
+    color: white;
+}
+.lockscreen__content__header{
+    font-size: 2em;
+}
+.lockscreen__content__body form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.form-group{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.form-control{
+    width: 200px;
+    height: 30px;
+    margin: 10px;
+    padding: 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    color: white;
+}
+.btn{
+    width: 100px;
+    height: 30px;
+    margin: 10px;
+    padding: 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    color: white;
+    transition: 500ms;
+    font-size: 15px;
+}
+.btn:hover{
+    background-color: rgba(0, 0, 0, 0.7);
+    transform: scale(1.2);
+}
+
+#powerOff_btn{ 
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background-image: url('../../assets/img/power/power_on.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: 200ms;
+    top: 20px;
+    left: 20px;
+}
+#powerOff_btn:hover{
+    transform: scale(1.1);
+    background-image: url('../../assets/img/power/power_off.png');
+}

@@ -1,0 +1,45 @@
+main{
+    background-image: url('../assets/img/desktop.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    color: white;
+}
+main *{
+    display: flex;
+    justify-content: center;
+}
+#powerOn{
+    width: 100vw;
+    height: 100vh;
+    font-size: 2em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#powerOn button{
+    width: 100px;
+    height: 100px;
+    transition: 500ms;
+    border: none;
+    background-color: transparent;
+    background-image: url('../assets/img/power/power_off.png'); /* Domyślny obraz */
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+#powerOn button:hover{
+    transform: scale(1.1);
+    background-image: url('../assets/img/power/power_on.png'); /* Obraz na hover */
+}
+#powerOn button:hover img{
+    background-image: url('../assets/img/power/power_on.png'); /* Nie działa */
+}

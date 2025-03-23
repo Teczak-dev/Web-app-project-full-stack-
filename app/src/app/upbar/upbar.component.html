@@ -1,0 +1,27 @@
+<div id="Bar">
+    <div id="left">
+        <button id="settings" (click)="openSettings()">
+            settings
+        </button>
+        <button id="account" (click)="openAccount()">
+            account
+        </button>
+    </div>
+    <div id="right">
+        <section id="time">
+            
+        </section>
+    </div>
+</div>
+<section id="SettingsPanel" *ngIf="showSettingsPanel">
+    
+    <a href="#">Sounds</a>
+    <a href="#" (click)="PowerOffBtn()" >Power Off</a>
+    <a class="last_a" href="#">Informations</a>
+    
+</section>
+<section id="AccountPanel" *ngIf="showAccountPanel">
+    <a href="#">Profile</a>
+    <a href="#">Settings</a>
+    <a class="last_a" href="#" (click)="logOff()">Log Out</a>
+</section>

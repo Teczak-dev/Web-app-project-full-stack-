@@ -1,0 +1,11 @@
+<main *ngIf="isLogin && isPowerOn">
+  <app-upbar (powerOffEvent)="powerOff()" (LogOutEvent)="setIsLoginFalse()"></app-upbar>
+  <div>
+    
+  </div>
+  <app-dock></app-dock>
+</main>
+<section id="powerOn" *ngIf="!isPowerOn">
+  <button (click)="PowerOn()"></button>
+</section>
+<app-lockscreen (setIsLogin)="setIsLoginTrue()" (powerOffEvent)="powerOff()"  *ngIf="!isLogin && isPowerOn"></app-lockscreen>

@@ -1,0 +1,66 @@
+#Bar{
+    width: 100vw;
+    height: 25px;
+    background-color: rgba(95, 94, 94, 0.1);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+#left{
+    width: 40%;
+}
+#settings,#account{
+    font-size: 13px;
+    margin-left: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    transition-duration: 200ms;
+}
+#settings:hover,#account:hover{
+    text-decoration: underline;
+}
+#center{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+}
+#right{
+    width: 40%;
+    text-align: right;
+    padding-right: 10px;
+}
+#SettingsPanel, #AccountPanel{
+    width: 140px;
+    height: 100px;
+    position: absolute;
+    left: 0px;
+    top: 25px;
+    background-color: rgba(106, 95, 95, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 0 0 10px 10px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+#AccountPanel{
+    left: 25px;
+}
+#SettingsPanel a, #AccountPanel a{
+    width: 100%;
+    height: 33%;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid gray;
+    color:white;
+}
+.last_a{
+    border-bottom: none;
+    border-radius: 0 0 10px 10px;
+}

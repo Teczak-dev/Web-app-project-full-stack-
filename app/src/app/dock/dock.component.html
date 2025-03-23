@@ -1,0 +1,98 @@
+<section id="dock">
+    <section class="app"  (click)="openTable()" >
+        <img src="../../assets/img/tablica.png" id="tableAppIcon" alt="tablica">
+    </section>
+    <section class="app" *ngIf="isEditTaskOpen || isAddTaskOpen" (click)="closeTable()">
+        <img src="../../assets/img/Futicons_free/png/Blockchain/outline/blockchain.png" id="task_add_edit_AppIcon" alt="edytor">
+    </section>
+    <section class="app" *ngIf="isAddTableOpen" (click)="closeTable()">
+        <img src="../../assets/img/Futicons_free/png/Transportation/outline/transit-drone2.png" id="table_add_AppIcon" alt="edytor">
+    </section>
+</section>
+<!--  OKNO Głównej aplikacji   -->
+<section id="window_of_tables" *ngIf="isTableWindowOpen">
+    <button class="close" (click)="closeTable()">
+        X
+    </button>
+    <div id="left">
+        
+        <h1>Tablice</h1>
+        <button class="add_table_btn" (click)="openAddTable()">
+            +
+        </button>
+
+        <section id="Tablice_viewer">
+            <button class="table_btn" *ngFor="let item of tablice" (click)="openTableInfo(item.id)" (dblclick)="askToDeleteTable(item.id)">
+                {{item.name}}
+            </button>
+            
+        </section>
+    </div>
+    <div id="right">
+        <h1>Zadania z tablicy: {{selectedTable}}</h1>
+        <button class="add_task_btn" (click)="openAddTask()">
+            +
+        </button>
+        
+        <section id="tasks_viewer">
+            <button class="task" *ngFor="let item of getFilteredTasks()" (dblclick)="editTask(item.id)">
+                
+                <button *ngIf="!item.zrealizowane" class="ready_task_btn" (click)="realizeTask(item.id)">
+                    Zrealizowano
+                </button>
+                <div *ngIf="item.zrealizowane">
+                    ✅
+                </div>
+                <h1>{{item.tytul}}</h1>
+                <button class="delete_task_btn" (click)="deleteTask(item.id)">
+                    Usuń
+                </button>
+
+            </button>
+        </section>
+    </div>
+    
+</section>
+<!--  OKNO EDYCJI ZADANIA   -->
+<section id="edit_task_window" *ngIf="isEditTaskOpen">
+    <button class="close" (click)="closeEditTask()">
+        X
+    </button>
+    <h1>Edytuj zadanie</h1>
+    <section id="edit_task">
+        <input type="text" [(ngModel)]="task_tytul" placeholder="Tytuł">
+        <textarea [(ngModel)]="task_opis" placeholder="Opis" maxlength="200" style="resize: none; width: 90%; height: 100px;"></textarea>
+        <select [(ngModel)]="task_tablica">
+            <option *ngFor="let item of tablice" [value]="item.name">{{item.name}}</option>
+        </select>
+        <button (click)="saveTask()">Zapisz</button>
+    </section>
+</section>
+<!-- OKNO DODAWANIA ZADAŃ -->
+<section id="add_task_window" *ngIf="isAddTaskOpen">
+    <button class="close" (click)="closeAddTask()">
+        X
+    </button>
+    <h1>Dodaj zadanie</h1>
+    <section id="add_task_viewer">
+        <input type="text" [(ngModel)]="task_tytul" placeholder="Tytuł">
+        <textarea [(ngModel)]="task_opis" placeholder="Opis" maxlength="200" style="resize: none; width: 90%; height: 100px;"></textarea>
+        <select [(ngModel)]="task_tablica">
+            <option *ngFor="let item of tablice" [value]="item.name">{{item.name}}</option>
+        </select>
+        <button (click)="addTask()">Dodaj</button>
+    </section>
+
+</section>
+<!-- OKNO DODAWANIA TABLICY -->
+<section id="add_table_window" *ngIf="isAddTableOpen">
+    <button class="close" (click)="closeAddTable()">
+        X
+    </button>
+    <h1>Dodaj tablicę</h1>
+    <section id="add_table_viewer">
+        <input type="text" [(ngModel)]="table_name" placeholder="Nazwa tablicy">
+        <button (click)="addTable()">Dodaj</button>
+    </section>
+
+</section>

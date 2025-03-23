@@ -1,0 +1,21 @@
+<div class="lockscreen__content">
+    <div class="lockscreen__content__header">
+        <h1>Lock Screen</h1>
+    </div>
+
+    <div class="lockscreen__content__body">
+        <form>
+
+            <div class="form-group">
+                <label for="username">Username: 
+                <input type="text" id="username" name="username" class="form-control" [(ngModel)]="username"> </label>
+                <label for="password">Password: 
+                <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password"> </label>
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="loginUser()">Login</button>
+        
+        </form>
+
+    </div>
+</div>
+<div id="powerOff_btn" (click)="powerOff()"></div>
