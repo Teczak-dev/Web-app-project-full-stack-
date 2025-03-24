@@ -1,16 +1,29 @@
-import { Component,EventEmitter,Output } from '@angular/core';
+import { Component,EventEmitter,Input,Output } from '@angular/core';
 import { NgIf } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-upbar',
-  imports: [NgIf],
+  imports: [NgIf,FormsModule],
   templateUrl: './upbar.component.html',
   styleUrl: './upbar.component.css'
 })
 export class UpbarComponent {
 
+  @Input() isLogged: boolean = false;
+
+  name: string = "";
+  login: string = "";
+  password: string = "";
+  password2: string = "";
+
+  showCreateAccountPanel : boolean = false
   showSettingsPanel: boolean = false;
   showAccountPanel: boolean = false;
+
+
 
   openSettings(){
     //console.log("Settings");
@@ -45,5 +58,23 @@ export class UpbarComponent {
     }
   }, 1000);
 
+  openAccountPanels(){//* Zarządzanie które okno konta otworzyć
+    if(this.isLogged){
+      this.showCreateAccountPanel = false;
+    }else{
+      this.showCreateAccountPanel = true;
+    }
+  }
+
+
+
+  closeCreateAccount(){
+    this.showCreateAccountPanel = false;
+  }
+  createAccount(){
+
+
+    this.LogOutEvent.emit();
+  }
 
 }

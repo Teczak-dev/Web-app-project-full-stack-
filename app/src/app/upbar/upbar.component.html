@@ -20,7 +20,16 @@
     
 </section>
 <section id="AccountPanel" *ngIf="showAccountPanel">
-    <a href="#">Profile</a>
+    <a href="#" (click)="openAccountPanels()" >Profile</a>
     <a href="#">Settings</a>
     <a class="last_a" href="#" (click)="logOff()">Log Out</a>
+</section>
+<section id="CreateAccountPanel" *ngIf="showCreateAccountPanel">
+    <button id="close" (click)="closeCreateAccount()">X</button>
+    <h1>Create Account</h1>
+    <input type="text" id="name" placeholder="Name" [(ngModel)]="name">
+    <input type="text" id="login" placeholder="Login" [(ngModel)]="login">
+    <input type="password" id="password" placeholder="Password" [(ngModel)]="password">
+    <input type="password" id="password2" placeholder="Repeat Password" [(ngModel)]="password2">
+    <button id="create" (click)="createAccount()">Create</button>
 </section>
