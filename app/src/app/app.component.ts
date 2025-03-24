@@ -19,6 +19,7 @@ export class AppComponent {
   
   isPowerOn:boolean = false;
   isLogin:boolean = false;
+  isValidUserLogin:boolean = false;
 
   powerOff(){
     this.isPowerOn = false;
@@ -37,7 +38,8 @@ export class AppComponent {
   }
 
   setUserLogin(login: string) {
-    this.userLogin = login; // Set the login value
+    this.userLogin = login;
+    this.isValidUserLogin = true;
     console.log('User login received:', this.userLogin);
   }
 

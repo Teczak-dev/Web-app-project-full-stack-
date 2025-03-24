@@ -2,6 +2,7 @@
     <div class="lockscreen__content__header">
         <h1>Lock Screen</h1>
     </div>
+    <div style="height: 200px;" ></div>
 
     <div class="lockscreen__content__body">
         <form>
@@ -13,9 +14,11 @@
                 <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password"> </label>
             </div>
             <button type="submit" class="btn btn-primary" (click)="loginUser()">Login</button>
-        
+            
+            <h5 style="position:fixed; bottom: 0;">jeżeli jesteś tu nowy to kliknij tutaj aby wejść jako gość i stworzyć swoje konto uytkownika: <button class="btn" (click)="loginAsGuest()" >GOŚĆ</button> </h5>
+            
         </form>
-
+        
     </div>
 </div>
 <div id="powerOff_btn" (click)="powerOff()"></div>

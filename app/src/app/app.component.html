@@ -3,7 +3,7 @@
   <div>
     
   </div>
-  <app-dock [login]="userLogin" ></app-dock>
+  <app-dock [isLog]="isValidUserLogin" [login]="userLogin" ></app-dock>
 </main>
 <section id="powerOn" *ngIf="!isPowerOn">
   <button (click)="PowerOn()"></button>

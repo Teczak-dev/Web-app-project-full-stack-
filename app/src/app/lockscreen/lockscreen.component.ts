@@ -54,4 +54,8 @@ export class LockscreenComponent {
     this.powerOffEvent.emit();
   }
 
+  loginAsGuest(){
+    this.setIsLogin.emit();
+  }
+
 }

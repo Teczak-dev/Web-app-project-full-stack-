@@ -57,7 +57,8 @@ const TaskSchema = new mongoose.Schema({
   tytul: String,
   opis: String,
   stan_zrobienia: Boolean,
-  tablica: String
+  tablica: String,
+  user: String
 });
 const Task = mongoose.model('tasks', TaskSchema);
 app.get('/tasks', async (req, res) => {
@@ -71,11 +72,11 @@ app.post('/tasks', async (req, res) => {
 });
 app.post('/tasks/delete', async (req, res) => {
   res.json(await Task.deleteOne({ tytul
-    : req.body.tytul }));
+    : req.body.tytul, tablica: req.body.tablica }));
 });
 app.post('/tasks/update', async(req, res)=>{
   const updatedTask = await Task.findOneAndUpdate(
-    { tytul: req.body.tytul },
+    { tytul: req.body.tytul, tablica: req.body.tablica, user: req.body.user },
     {
       $set: {
         opis: req.body.opis,

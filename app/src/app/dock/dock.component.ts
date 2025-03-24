@@ -15,7 +15,7 @@ import { UserService } from '../services/user.service';
   styleUrl: './dock.component.css'
 })
 export class DockComponent {
-
+  @Input() isLog = false;
   @Input() login: string = "";
 
 
@@ -40,7 +40,8 @@ export class DockComponent {
     tytul:string,
     opis:string,
     stan_zrobienia:boolean,
-    tablica:string
+    tablica:string,
+    user:string
   }[] = [];
 
   constructor(private userService: UserService) {}
@@ -52,7 +53,7 @@ export class DockComponent {
     });
 
     this.userService.getTasks().subscribe(data =>{
-      this.zadania = data;
+      this.zadania = data?.filter((zadanie: { user: string; }) => zadanie.user === this.login);
     });
 
   }
@@ -65,7 +66,7 @@ export class DockComponent {
     //alert(this.login)
   }
 
-  getFilteredTasks() {//* filtruje zdania po tablicy
+  getFilteredTasks() {//* filtruje zdania po tablicy=
     return this.zadania.filter(zadanie => zadanie.tablica === this.selectedTable);
   }
 
@@ -74,7 +75,7 @@ export class DockComponent {
       this.selectedTable = "";
     }
     else{
-      const tablica = this.tablice?.find(item => item.nazwa === nam);
+      const tablica = this.tablice?.find(item => item.nazwa === nam && item.user === this.login);
       if (tablica) {
         this.selectedTable = tablica.nazwa;
       }
@@ -95,7 +96,7 @@ export class DockComponent {
   }
 
   editTask(nazwa: string){//* edycja zadania( otwarcie okna edycji)
-    const zadanie = this.zadania.find(zadanie => zadanie.tytul === nazwa);
+    const zadanie = this.zadania.find(zadanie => zadanie.tytul === nazwa && zadanie.tablica === this.selectedTable);
     if (zadanie) {
       // alert(`Edytuje zadanie o id: ${id} i tytule: ${zadanie.tytul}, opisie: ${zadanie.opis}`);
       this.isEditTaskOpen = true;
@@ -110,18 +111,18 @@ export class DockComponent {
   }
 
   deleteTask(nazw: string){//* usuwanie zadania
-    const index = this.zadania.findIndex(zadanie => zadanie.tytul === nazw);
+    const index = this.zadania.findIndex(zadanie => zadanie.tytul === nazw && zadanie.tablica === this.selectedTable);
     if (index !== -1) {
       //połączenie
 
-      this.userService.deleteTask({tytul:nazw}).subscribe();
+      this.userService.deleteTask({tytul:nazw, tablica:this.selectedTable}).subscribe();
       this.zadania.splice(index, 1);
     } else {
       alert(`Nie znaleziono zadania o id: ${nazw}`);
     }
   }
   realizeTask(nazw: string){//* realizacja zadania  
-    const zadanie = this.zadania.find(zadanie => zadanie.tytul === nazw);
+    const zadanie = this.zadania.find(zadanie => zadanie.tytul === nazw && zadanie.tablica === this.selectedTable);
     if (zadanie) {
       //połączenie
       zadanie.stan_zrobienia = true;
@@ -129,22 +130,25 @@ export class DockComponent {
         tytul: zadanie.tytul,
         opis: zadanie.opis,
         stan_zrobienia: zadanie.stan_zrobienia,
-        tablica: zadanie.tablica
+        tablica: zadanie.tablica,
+        user: zadanie.user
       }).subscribe();
     }
   }
   saveTask(){//* zapisuje edytowane zadanie
-    const zadanie = this.zadania.find(zadanie => zadanie.tytul === this.selectedTask);
+    const zadanie = this.zadania.find(zadanie => zadanie.tytul === this.selectedTask && zadanie.tablica === this.task_tablica);
     if (zadanie) {
       zadanie.tytul = this.task_tytul;
       zadanie.opis = this.task_opis;
       zadanie.tablica = this.task_tablica;
+      zadanie.user = this.login;
       //połączenie
       this.userService.updateTask({
         tytul: zadanie.tytul,
         opis: zadanie.opis,
         stan_zrobienia: zadanie.stan_zrobienia,
-        tablica: zadanie.tablica
+        tablica: zadanie.tablica,
+        user: zadanie.user
       }).subscribe();
       this.closeEditTask();
       this.cleanVariablesOfTask();
@@ -170,18 +174,25 @@ export class DockComponent {
       alert("Wypełnij wszystkie pola");
     }
     else{
-      const id = this.zadania.length + 1;
-      const task:any = {
-        tytul: this.task_tytul, 
-        opis: this.task_opis, 
-        tablica: this.task_tablica, 
-        stan_zrobienia: false
+      const task = this.zadania.find(task => task.tytul === this.task_tytul && task.tablica === this.task_tablica && task.user === this.login);
+      if (task) {
+        alert(`Zadanie o tytule: ${this.task_tytul} już istnieje`);
       }
-      this.zadania.push(task);
-      //połączenie
-      this.userService.addTask(task).subscribe();
-      this.closeAddTask();
-      this.cleanVariablesOfTask();
+      else{
+        //const id = this.zadania.length + 1;
+        const task:any = {
+          tytul: this.task_tytul, 
+          opis: this.task_opis, 
+          stan_zrobienia: false,
+          tablica: this.task_tablica, 
+          user: this.login
+        }
+        this.zadania.push(task);
+        //połączenie
+        this.userService.addTask(task).subscribe();
+        this.closeAddTask();
+        this.cleanVariablesOfTask();
+      }
     }
   }
 
@@ -209,10 +220,17 @@ export class DockComponent {
       alert("Wypełnij pole");
     }
     else{
-      const id = this.tablice.length + 1;
-      this.tablice.push({nazwa: this.table_name, user: this.login});
-      this.userService.addTable({nazwa: this.table_name, user: this.login}).subscribe();
-      this.closeAddTable();
+
+      const tablica = this.tablice.find(tablica => tablica.nazwa === this.table_name);
+      if (tablica) {
+        alert(`Tablica o nazwie: ${this.table_name} już istnieje`);
+      }
+      else{
+        const id = this.tablice.length + 1;
+        this.tablice.push({nazwa: this.table_name, user: this.login});
+        this.userService.addTable({nazwa: this.table_name, user: this.login}).subscribe();
+        this.closeAddTable();
+      }
     }
 
   }
