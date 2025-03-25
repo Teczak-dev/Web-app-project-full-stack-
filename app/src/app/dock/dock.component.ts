@@ -244,7 +244,7 @@ export class DockComponent {
           this.deleteTask(x.tytul);
         }
       }
-      this.userService.deleteTable({nazwa: nazw}).subscribe();
+      this.userService.deleteTable({nazwa: nazw, user: this.login}).subscribe();
       
       
       

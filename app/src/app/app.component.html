@@ -1,5 +1,5 @@
 <main *ngIf="isLogin && isPowerOn">
-  <app-upbar [isLogged]="isValidUserLogin"  (powerOffEvent)="powerOff()" (LogOutEvent)="setIsLoginFalse()"></app-upbar>
+  <app-upbar [logUser]="userLogin" [isLogged]="isValidUserLogin"  (powerOffEvent)="powerOff()" (LogOutEvent)="setIsLoginFalse()"></app-upbar>
   <div>
     
   </div>

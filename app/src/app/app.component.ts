@@ -35,6 +35,7 @@ export class AppComponent {
 
   setIsLoginFalse(){
     this.isLogin = false;
+    this.isValidUserLogin = false;
   }
 
   setUserLogin(login: string) {

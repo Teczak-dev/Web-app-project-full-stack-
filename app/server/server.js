@@ -19,7 +19,6 @@ const UserSchema = new mongoose.Schema({
     imie: String,
     login: String,
     haslo: String,
-    id: Number
 });
 const User = mongoose.model('users', UserSchema);
 app.get('/users', async (req, res) => {
@@ -49,7 +48,7 @@ app.post('/tables', async (req, res) => {
 });
 app.post('/tables/delete', async (req, res) => {
   res.json(await Tablica.deleteOne({ nazwa
-    : req.body.nazwa }));
+    : req.body.nazwa, user: req.body.user }));
 });
 
 // dane zwiazane z wzorem zadania i dodawanie oraz pobieranie zadań

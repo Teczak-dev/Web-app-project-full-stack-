@@ -35,7 +35,7 @@
 }
 #SettingsPanel, #AccountPanel{
     width: 140px;
-    height: 100px;
+    height: 67px;
     position: absolute;
     left: 0px;
     top: 25px;
@@ -47,15 +47,12 @@
     align-items: center;
     flex-direction: column;
 }
-#SettingsPanel{
-    height: 67px;
-}
 #AccountPanel{
     left: 25px;
 }
 #SettingsPanel a, #AccountPanel a{
     width: 100%;
-    height: 33%;
+    height: 50%;
     text-decoration: none;
     display: flex;
     justify-content: center;
@@ -63,13 +60,124 @@
     border-bottom: 2px solid gray;
     color:white;
 }
-#SettingsPanel a{
-    height: 50%;
-}
 #SettingsPanel a:hover, #AccountPanel a:hover{
     background-color: rgba(106, 95, 95, 0.5);
 }
 .last_a{
     border-bottom: none;
     border-radius: 0 0 10px 10px;
+}
+#CreateAccountPanel,#LogAccountPanel{
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    background-color: rgba(106, 95, 95, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+.close{
+    width:  15px;
+    height: 15px;
+    background-color: white;
+    color:black;
+    position: relative;
+    left:-50%;
+    top:0;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition-duration: 500ms;
+    border:none;
+}
+.close:hover{
+    transform: scale(1.1);
+    background-color: red;
+}
+.add_user_input{
+    width: 80%;
+    height: 20px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(106, 95, 95, 0.5);
+    color: white;
+    text-align: center;
+}
+#create{
+    width: 80%;
+    height: 30px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(106, 95, 95, 0.5);
+    color: white;
+    text-align: center;
+    transition-duration: 200ms;
+}
+#create:hover{
+    background-color: rgba(103, 98, 98, 0.7);
+}
+#Settings_Account_Panel{
+    width: 200px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    flex-direction: column;
+    right: 0;
+    top: 300px;
+    background-color: rgba(131, 130, 130, 0.7);
+    backdrop-filter: blur(10px);
+}
+#Informations{
+    width: 200px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 100px;
+    left: 20px;
+    background-color: rgba(131, 130, 130, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 10px;
+}
+#Informations button{
+    width:  30px;
+    height: 15px;
+    background-color: white;
+    color:black;
+    position: relative;
+    left:-10px;
+    top:-50%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition-duration: 500ms;
+    border:none;
+}
+#Informations button:hover{
+    transform: scale(1.1);
+    background-color: red;
+}
+#Informations a{
+    color: white;
+    text-decoration: none;
+    transition-duration: 200ms;
+}
+#Informations a:hover{
+    color: blue;
 }
